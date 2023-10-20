@@ -8,6 +8,20 @@ import java.util.concurrent.TimeUnit
 
 private const val TIME_OUT = 30L
 
+val NetworkModule = module {
+
+    single { createService(get()) }
+
+    single { createRetrofit(get(), BuildConfig.BASE_URL) }
+
+    single { createOkHttpClient() }
+
+    single { MoshiConverterFactory.create() }
+
+    single { Moshi.Builder().build() }
+
+}
+
 fun createOkHttpClient(): OkHttpClient {
     val httpLoggingInterceptor = HttpLoggingInterceptor()
     httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BASIC
@@ -22,4 +36,16 @@ fun createRetrofit(okHttpClient: OkHttpClient, url: String): Retrofit {
         .baseUrl(url)
         .client(okHttpClient)
         .addConverterFactory(MoshiConverterFactory.create()).build()
+}
+
+fun createService(retrofit: Retrofit): ApiService {
+    return retrofit.create(ApiService::class.java)
+}
+
+fun createPostRepository(apiService: ApiService): PostsRepository {
+    return PostsRepositoryImp(apiService)
+}
+
+fun createGetPostsUseCase(postsRepository: PostsRepository): GetPostsUseCase {
+    return GetPostsUseCase(postsRepository)
 }
