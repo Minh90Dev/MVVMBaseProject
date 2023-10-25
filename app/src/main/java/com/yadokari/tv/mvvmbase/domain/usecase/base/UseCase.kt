@@ -24,5 +24,4 @@ abstract class UseCase<Type, in Params>() where Type : Any {
             }
         }
     }
-
 }

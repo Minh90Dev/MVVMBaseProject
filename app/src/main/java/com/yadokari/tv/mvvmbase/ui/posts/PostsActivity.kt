@@ -1,5 +1,18 @@
 package com.yadokari.tv.mvvmbase.ui.posts
 
+import android.os.Bundle
+import android.view.View.GONE
+import android.view.View.VISIBLE
+import android.widget.Toast
+import android.widget.Toast.LENGTH_LONG
+import android.widget.Toast.LENGTH_SHORT
+import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import com.yadokari.tv.mvvmbase.R
+import com.yadokari.tv.mvvmbase.databinding.ActivityPostsBinding
+import com.yadokari.tv.mvvmbase.utils.isNetworkAvailable
+import org.koin.androidx.viewmodel.ext.android.viewModel
+
 class PostsActivity : AppCompatActivity() {
 
     private lateinit var activityPostsBinding: ActivityPostsBinding
@@ -25,18 +38,18 @@ class PostsActivity : AppCompatActivity() {
 
         with(postViewModel) {
 
-            postsData.observe(this@PostsActivity, Observer {
+            postsData.observe(this@PostsActivity) {
                 activityPostsBinding.postsProgressBar.visibility = GONE
                 mAdapter?.mPostList = it
-            })
+            }
 
-            messageData.observe(this@PostsActivity, Observer {
+            messageData.observe(this@PostsActivity) {
                 Toast.makeText(this@PostsActivity, it, LENGTH_LONG).show()
-            })
+            }
 
-            showProgressbar.observe(this@PostsActivity, Observer { isVisible ->
-                posts_progress_bar.visibility = if (isVisible) VISIBLE else GONE
-            })
+            showProgressbar.observe(this@PostsActivity) { isVisible ->
+                activityPostsBinding.postsProgressBar.visibility = if (isVisible) VISIBLE else GONE
+            }
         }
     }
 

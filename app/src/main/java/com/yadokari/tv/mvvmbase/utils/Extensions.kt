@@ -3,24 +3,17 @@ package com.yadokari.tv.mvvmbase.utils
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.os.Build
 
 fun Context.isNetworkAvailable(): Boolean {
     val connectivityManager = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val network = connectivityManager.activeNetwork ?: return false
+    val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
 
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-        val networkInfo = connectivityManager.activeNetworkInfo
-        return networkInfo != null && networkInfo.isConnected
+    return when {
+        activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+        activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+        activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+        activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH) -> true
+        else -> false
     }
-
-    // Internet connectivity check in Android Q
-    val networks = connectivityManager.allNetworks
-    var hasInternet = false
-    if (networks.isNotEmpty()) {
-        for (network in networks) {
-            val networkCapabilities = connectivityManager.getNetworkCapabilities(network)
-            if (networkCapabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true) hasInternet = true
-        }
-    }
-    return hasInternet
 }

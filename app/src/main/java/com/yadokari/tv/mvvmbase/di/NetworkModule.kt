@@ -1,7 +1,14 @@
 package com.yadokari.tv.mvvmbase.di
 
+import com.squareup.moshi.Moshi
+import com.yadokari.tv.mvvmbase.BuildConfig
+import com.yadokari.tv.mvvmbase.data.repository.PostsRepositoryImp
+import com.yadokari.tv.mvvmbase.data.source.remote.ApiService
+import com.yadokari.tv.mvvmbase.domain.repository.PostsRepository
+import com.yadokari.tv.mvvmbase.domain.usecase.GetPostsUseCase
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit

@@ -1,5 +1,15 @@
 package com.yadokari.tv.mvvmbase.ui.posts
 
+import android.util.Log
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.yadokari.tv.mvvmbase.domain.model.ApiError
+import com.yadokari.tv.mvvmbase.domain.model.Post
+import com.yadokari.tv.mvvmbase.domain.usecase.GetPostsUseCase
+import com.yadokari.tv.mvvmbase.domain.usecase.base.UseCaseResponse
+import kotlinx.coroutines.cancel
+
 class PostsViewModel constructor(private val getPostsUseCase: GetPostsUseCase) : ViewModel() {
 
     val postsData = MutableLiveData<List<Post>>()
@@ -31,5 +41,4 @@ class PostsViewModel constructor(private val getPostsUseCase: GetPostsUseCase) :
     companion object {
         private val TAG = PostsViewModel::class.java.name
     }
-
 }

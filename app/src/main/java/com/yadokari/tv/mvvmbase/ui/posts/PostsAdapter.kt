@@ -1,5 +1,15 @@
 package com.yadokari.tv.mvvmbase.ui.posts
 
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
+import androidx.recyclerview.widget.RecyclerView
+import com.yadokari.tv.mvvmbase.domain.model.Post
+import com.yadokari.tv.mvvmbase.R
+import com.yadokari.tv.mvvmbase.databinding.HolderPostBinding
+import kotlin.properties.Delegates
+
 class PostsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var mPostList: List<Post> by Delegates.observable(emptyList()) { _, _, _ ->
