@@ -1,5 +1,8 @@
 package com.yadokari.tv.mvvmbase.di
 
+import android.util.Log
+import com.ihsanbal.logging.Level
+import com.ihsanbal.logging.LoggingInterceptor
 import com.squareup.moshi.Moshi
 import com.yadokari.tv.mvvmbase.BuildConfig
 import com.yadokari.tv.mvvmbase.data.repository.PostsRepositoryImp
@@ -7,7 +10,6 @@ import com.yadokari.tv.mvvmbase.data.source.remote.ApiService
 import com.yadokari.tv.mvvmbase.domain.repository.PostsRepository
 import com.yadokari.tv.mvvmbase.domain.usecase.GetPostsUseCase
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -19,7 +21,7 @@ val NetworkModule = module {
 
     single { createService(get()) }
 
-    single { createRetrofit(get(), BuildConfig.BASE_URL) }
+    single { createRetrofit(get(), BuildConfig.API_BASE_URL) }
 
     single { createOkHttpClient() }
 
@@ -30,8 +32,11 @@ val NetworkModule = module {
 }
 
 fun createOkHttpClient(): OkHttpClient {
-    val httpLoggingInterceptor = HttpLoggingInterceptor()
-    httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BASIC
+    val httpLoggingInterceptor = LoggingInterceptor.Builder()
+        .setLevel(Level.BASIC)
+        .log(Log.DEBUG)
+        .build()
+
     return OkHttpClient.Builder()
         .connectTimeout(TIME_OUT, TimeUnit.SECONDS)
         .readTimeout(TIME_OUT, TimeUnit.SECONDS)
