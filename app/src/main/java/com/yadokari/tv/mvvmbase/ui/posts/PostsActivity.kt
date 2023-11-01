@@ -1,33 +1,26 @@
 package com.yadokari.tv.mvvmbase.ui.posts
 
-import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
 import android.widget.Toast.LENGTH_SHORT
-import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
+import androidx.activity.viewModels
 import com.yadokari.tv.mvvmbase.R
 import com.yadokari.tv.mvvmbase.databinding.ActivityPostsBinding
+import com.yadokari.tv.mvvmbase.ui.base.BaseActivity
 import com.yadokari.tv.mvvmbase.utils.isNetworkAvailable
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class PostsActivity : AppCompatActivity() {
+class PostsActivity : BaseActivity<PostsViewModel, ActivityPostsBinding>(R.layout.activity_posts) {
 
-    private lateinit var activityPostsBinding: ActivityPostsBinding
-    private var mAdapter: PostsAdapter? = PostsAdapter()
-    private val postViewModel: PostsViewModel by viewModel()
+    override val viewModel: PostsViewModel by viewModels()
+    private var mAdapter : PostsAdapter? = PostsAdapter()
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        activityPostsBinding = DataBindingUtil.setContentView(this, R.layout.activity_posts)
-
-        activityPostsBinding.postsRecyclerView.adapter = mAdapter
+    override fun initView() {
+        binding.postsRecyclerView.adapter = mAdapter
 
         if (isNetworkAvailable()) {
-            postViewModel.getPosts()
+            viewModel.getPosts()
         } else {
             Toast.makeText(
                 this,
@@ -36,10 +29,9 @@ class PostsActivity : AppCompatActivity() {
             ).show()
         }
 
-        with(postViewModel) {
-
+        with(viewModel) {
             postsData.observe(this@PostsActivity) {
-                activityPostsBinding.postsProgressBar.visibility = GONE
+                binding.postsProgressBar.visibility = GONE
                 mAdapter?.mPostList = it
             }
 
@@ -48,11 +40,10 @@ class PostsActivity : AppCompatActivity() {
             }
 
             showProgressbar.observe(this@PostsActivity) { isVisible ->
-                activityPostsBinding.postsProgressBar.visibility = if (isVisible) VISIBLE else GONE
+                binding.postsProgressBar.visibility = if (isVisible) VISIBLE else GONE
             }
         }
     }
-
 
     override fun onDestroy() {
         mAdapter = null
