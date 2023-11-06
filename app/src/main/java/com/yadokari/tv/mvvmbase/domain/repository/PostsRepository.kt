@@ -4,4 +4,6 @@ import com.yadokari.tv.mvvmbase.domain.model.Post
 
 interface PostsRepository {
     suspend fun getPosts(): List<Post>
+
+    suspend fun getPostDetails(postId: Int): Post?
 }

@@ -105,6 +105,10 @@ dependencies {
         exclude group: 'org.json', module: 'json'
     }
 
+    // Database
+    implementation "androidx.room:room-runtime:$room_version"
+    ksp "androidx.room:room-compiler:$room_version"
+
     // Test
     testImplementation 'junit:junit:4.13.2'
     testImplementation "org.koin:koin-test:$koin_version"
