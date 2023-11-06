@@ -6,6 +6,7 @@ import com.ihsanbal.logging.LoggingInterceptor
 import com.squareup.moshi.Moshi
 import com.yadokari.tv.mvvmbase.BuildConfig
 import com.yadokari.tv.mvvmbase.data.repository.PostsRepositoryImp
+import com.yadokari.tv.mvvmbase.data.source.local.AppDatabase
 import com.yadokari.tv.mvvmbase.data.source.remote.ApiService
 import com.yadokari.tv.mvvmbase.domain.repository.PostsRepository
 import com.yadokari.tv.mvvmbase.domain.usecase.GetPostsUseCase
@@ -54,8 +55,8 @@ fun createService(retrofit: Retrofit): ApiService {
     return retrofit.create(ApiService::class.java)
 }
 
-fun createPostRepository(apiService: ApiService): PostsRepository {
-    return PostsRepositoryImp(apiService)
+fun createPostRepository(appDatabase: AppDatabase, apiService: ApiService): PostsRepository {
+    return PostsRepositoryImp(appDatabase, apiService)
 }
 
 fun createGetPostsUseCase(postsRepository: PostsRepository): GetPostsUseCase {
